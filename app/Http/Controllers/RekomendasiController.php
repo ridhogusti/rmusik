@@ -147,12 +147,12 @@ class RekomendasiController extends Controller
         ->paginate($perPage);
         } else {
         // $preference = Metadata::paginate($perPage);j
-            $posts = Review::orderBy('created_at','DESC')->limit(2)->get();
+            $posts = Review::orderBy('created_at','DESC')->limit(10)->get();
            if (collect(Auth::user())->count() == null) {
                # code...
-            $preferencebaru = Metadata::orderBy('id','DESC')->limit(2)->get();
+            $preferencebaru = Metadata::orderBy('id','DESC')->limit(10)->get();
             // return $preferencebaru;
-            $preferencepopuler = Metadata::orderBy('id','DESC')->limit(2)->get();
+            $preferencepopuler = Metadata::orderBy('id','DESC')->limit(10)->get();
            } 
            else{
 
@@ -695,13 +695,21 @@ class RekomendasiController extends Controller
                 ->join('metadata', 'review.amazon_id', 'metadata.amazon_id')->where('metadata.id', $id)->get();
             if (collect($musik)->count() == null) {
                 $musik = Metadata::findOrFail($id);
-                $rekomendasi = Review::where('user_id',Auth::user()->id)
-                ->join('metadata', 'review.amazon_id', 'metadata.amazon_id')->get();
+                // $rekomendasi = Review::where('user_id',Auth::user()->id)
+                // ->join('metadata', 'review.amazon_id', 'metadata.amazon_id')->get();
+                $rekomendasii = Hasilrekomendasi::where('reviewerid',Auth::user()->id)
+                ->where('rekomend', 'NO')
+                ->join('metadata', 'hasilrekomdasi.amazon_id', 'metadata.amazon_id')->get();
+            $rekomendasi = collect($rekomendasii)->sortByDesc('hasil');
             }
             else {
                 $musik = $musik[0];
-                $rekomendasi = Review::where('user_id',Auth::user()->id)
-                ->join('metadata', 'review.amazon_id', 'metadata.amazon_id')->get();
+                $rekomendasii = Hasilrekomendasi::where('reviewerid',Auth::user()->id)
+                ->where('rekomend', 'NO')
+                ->join('metadata', 'hasilrekomdasi.amazon_id', 'metadata.amazon_id')->get();
+            $rekomendasi = collect($rekomendasii)->sortByDesc('hasil');
+                // $rekomendasi = Review::where('user_id',Auth::user()->id)
+                // ->join('metadata', 'review.amazon_id', 'metadata.amazon_id')->get();
             }            
         }
         // if (collect(Auth::user()->id)->count() == null) {

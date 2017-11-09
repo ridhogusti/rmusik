@@ -41,5 +41,8 @@ Route::group(['prefix'=>'member', 'middleware'=>['auth']], function () {
     Route::post('/member/rating/create', 'RekomendasiController@create');
     Route::post('/member/rating/createdetail', 'RekomendasiController@createdetail');
 
+    Route::get('/testpenguji', 'PengujianController@index')->name('/');
+    Route::get('test', 'PengujianController@index');
+
 
 // Route::get('/', 'HomeController@index')->name('home');
